@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="img/images.png" rel="icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --black:#0a0a0a;--dark:#111111;--coal:#1c1c1c;--smoke:#2e2e2e;
+            --ash:#555555;--silver:#999999;--fog:#cccccc;--white:#f5f5f5;
+            --pure:#ffffff;--accent:#e8e0d0;--gold:#c8a96e;
+            --font-title:'Cinzel Decorative','Cinzel',serif;
+            --font-head:'Cinzel',serif;
+            --font-body:'Cormorant Garamond',Georgia,serif;
+        }
+        html{scroll-behavior:smooth}
+        body{background:var(--black);color:var(--fog);font-family:var(--font-body);font-size:18px;line-height:1.85;overflow-x:hidden}
+        body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.35}
+        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--ash);border-radius:2px}
+
+        /* NAV */
+        .nav-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:center;gap:36px;padding:16px 40px;background:rgba(10,10,10,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+        .nav-bar a{font-family:var(--font-head);font-size:.62rem;letter-spacing:.38em;text-transform:uppercase;color:var(--silver);text-decoration:none;transition:color .3s}
+        .nav-bar a:hover{color:var(--gold)}
+
+        /* HERO */
+        .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px;overflow:hidden}
+        .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,169,110,.07) 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(255,255,255,.03) 0%,transparent 60%),var(--black);z-index:0}
+        .hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.02) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,.015) 80px);z-index:0}
+        .hero-orb{position:absolute;top:50%;left:50%;width:700px;height:700px;border:1px solid rgba(200,169,110,.06);border-radius:50%;transform:translate(-50%,-50%);animation:floatOrb 8s ease-in-out infinite;z-index:0}
+        .hero-orb::before{content:'';position:absolute;inset:40px;border:1px solid rgba(200,169,110,.04);border-radius:50%}
+        .hero-orb::after{content:'';position:absolute;inset:80px;border:1px solid rgba(200,169,110,.03);border-radius:50%}
+        .hero-content{position:relative;z-index:1}
+        .hero-eyebrow{font-family:var(--font-head);font-size:.68rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:26px;opacity:0;animation:fadeUp .8s ease .2s forwards}
+        .hero-div{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 30px;opacity:0;animation:fadeIn 1s ease .4s forwards}
+        .hero-title{font-family:var(--font-title);font-size:clamp(2.6rem,8vw,6.5rem);font-weight:900;color:var(--white);line-height:1.1;letter-spacing:.05em;margin-bottom:14px;opacity:0;animation:fadeUp 1s ease .3s forwards}
+        .hero-sub{font-family:var(--font-head);font-size:clamp(.75rem,2vw,.95rem);letter-spacing:.3em;text-transform:uppercase;color:var(--silver);opacity:0;animation:fadeUp .8s ease .6s forwards}
+
+        /* SECTIONS */
+        .section{max-width:900px;margin:0 auto;padding:100px 32px;opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
+        .section.visible{opacity:1;transform:translateY(0)}
+        .section-label{font-family:var(--font-head);font-size:.63rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+        .section-title{font-family:var(--font-head);font-size:clamp(1.5rem,4vw,2.6rem);font-weight:700;color:var(--white);line-height:1.2;margin-bottom:34px;border-bottom:1px solid rgba(200,169,110,.2);padding-bottom:18px}
+        p{color:var(--fog);margin-bottom:22px;font-size:1.08rem;line-height:1.9}
+
+        /* DIVIDER */
+        .sep{width:100%;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(200,169,110,.3) 30%,rgba(200,169,110,.3) 70%,transparent 100%)}
+
+        /* PROFILE CARD */
+        .profile-card{display:grid;grid-template-columns:160px 1fr;gap:36px;align-items:center;border:1px solid rgba(255,255,255,.08);padding:36px;margin:44px 0;background:rgba(255,255,255,.02);position:relative;overflow:hidden}
+        .profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+        .profile-avatar{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,var(--smoke) 0%,var(--coal) 100%);border:2px solid rgba(200,169,110,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-title);font-size:3.5rem;color:var(--gold);flex-shrink:0}
+        .profile-name{font-family:var(--font-head);font-size:1.7rem;color:var(--white);margin-bottom:6px}
+        .profile-meta{font-family:var(--font-head);font-size:.63rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+
+        /* GALLERY */
+        .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:44px 0}
+        .gallery-item{position:relative;overflow:hidden;aspect-ratio:3/4;background:var(--coal)}
+        .gallery-item img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%) contrast(1.1);transition:transform .7s ease,filter .5s ease;display:block}
+        .gallery-item:hover img{transform:scale(1.05);filter:grayscale(50%) contrast(1.1)}
+        .gallery-item::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.7) 100%);pointer-events:none}
+        .gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:14px;font-family:var(--font-head);font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--fog);z-index:1}
+
+        /* PULL QUOTE */
+        .pull-quote{border-left:3px solid var(--gold);padding:22px 36px;margin:44px 0;background:rgba(200,169,110,.04)}
+        .pull-quote p{font-style:italic;font-size:1.25rem;color:var(--accent);margin:0;line-height:1.7}
+        .pull-quote cite{display:block;font-family:var(--font-head);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:14px}
+
+        /* STATS */
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);margin:44px 0}
+        .stat{background:var(--dark);padding:28px 16px;text-align:center}
+        .stat-number{font-family:var(--font-head);font-size:2rem;font-weight:700;color:var(--white);line-height:1;display:block}
+        .stat-label{font-family:var(--font-head);font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ash);margin-top:7px;display:block}
+
+        /* VIDEO */
+        .video-wrap{position:relative;margin:44px 0;border:1px solid rgba(200,169,110,.15);overflow:hidden}
+        .video-wrap::before{content:'';display:block;padding-top:56.25%}
+        .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+
+        /* TIMELINE */
+        .timeline{position:relative;margin:44px 0;padding-left:30px}
+        .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--gold),transparent)}
+        .timeline-item{margin-bottom:36px;position:relative;opacity:0;transform:translateX(-18px);transition:opacity .6s ease,transform .6s ease}
+        .timeline-item.visible{opacity:1;transform:translateX(0)}
+        .timeline-item::before{content:'';position:absolute;left:-34px;top:7px;width:8px;height:8px;background:var(--gold);border-radius:50%}
+        .timeline-year{font-family:var(--font-head);font-size:.63rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase}
+        .timeline-name{font-family:var(--font-head);font-size:1.05rem;color:var(--white);margin-top:3px}
+        .timeline-desc{color:var(--silver);font-size:.95rem;margin-top:5px;line-height:1.6}
+        .timeline-item:nth-child(2){transition-delay:.1s}
+        .timeline-item:nth-child(3){transition-delay:.2s}
+        .timeline-item:nth-child(4){transition-delay:.3s}
+        .timeline-item:nth-child(5){transition-delay:.4s}
+        .timeline-item:nth-child(6){transition-delay:.5s}
+        .timeline-item:nth-child(7){transition-delay:.6s}
+        .timeline-item:nth-child(8){transition-delay:.7s}
+
+        /* FOOTER */
+        footer{text-align:center;padding:56px 32px;border-top:1px solid rgba(255,255,255,.06)}
+        footer p{font-family:var(--font-head);font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:var(--ash)}
+
+        /* KEYFRAMES */
+        @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes floatOrb{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.04)}}
+
+        @media(max-width:700px){
+            .gallery{grid-template-columns:repeat(2,1fr)}
+            .stats{grid-template-columns:repeat(2,1fr)}
+            .profile-card{grid-template-columns:1fr;text-align:center}
+            .profile-avatar{margin:0 auto}
+            .nav-bar{gap:16px;flex-wrap:wrap;padding:12px 18px}
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="nav-bar">
+    <a href="#yo">Sobre Mí</a>
+    <a href="#eminem">Eminem</a>
+    <a href="#discografia">Discografía</a>
+    <a href="#legado">Legado</a>
+    <a href="#video">Video</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-content">
+        <p class="hero-eyebrow">Bienvenido a mi página personal</p>
+        <div class="hero-div"></div>
+        <h1 class="hero-title">Pilarth &amp; Eminem</h1>
+        <p class="hero-sub">Colegio INEM Kennedy &nbsp;·&nbsp; Programación &amp; Diseño Web &nbsp;·&nbsp; 2026</p>
+    </div>
+</header>
+
+<!-- ══ SECCIÓN: YO ══ -->
+<section class="section" id="yo">
+    <span class="section-label">Autobiografía</span>
+    <h2 class="section-title">Sobre Mí</h2>
+
+    <div class="profile-card">
+        <div class="profile-avatar">P</div>
+        <div>
+            <p class="profile-name">Pilarth</p>
+            <p class="profile-meta">Bogotá, Colombia &nbsp;·&nbsp; Grado Once &nbsp;·&nbsp; Diseño Web</p>
+            <p style="margin:0">Estudiante de programación y diseño web, apasionada por la tecnología, la música y la superación personal.</p>
+        </div>
+    </div>
+
+    <!-- PÁRRAFO ORIGINAL -->
+    <p>hola me llamo pilarth tengo 16 años, vivo en bogota colombia exactamente en bogota kennedy, estoy cursando actualmente grado once en el colegio Inem kennedy, en la modalidad de programacion y diseño web de jornada mañana</p>
+
+    <!-- CONTENIDO EXPANDIDO -->
+    <p>Nací el 14 de noviembre de 2009 en Bogotá, Colombia, en el corazón de la localidad de Kennedy. Desde pequeña crecí rodeada de música, pantallas encendidas y la curiosidad constante de saber cómo funcionaban las cosas por dentro. Recuerdo que a los ocho años desarmé el control remoto de la televisión solo para entender qué había adentro; mi mamá no quedó muy contenta, pero ese día supe que quería dedicarme a construir y entender tecnología.</p>
+
+    <p>Kennedy es uno de los barrios más vibrantes y diversos de la capital colombiana. Crecer aquí me enseñó resiliencia, adaptabilidad y la capacidad de encontrar oportunidades en los espacios más inesperados. La gente de mi barrio es trabajadora, creativa y siempre dispuesta a ayudar, valores que cargo conmigo a diario y que me recuerdan de dónde vengo cada vez que me enfrento a un reto nuevo.</p>
+
+    <p>En el Colegio INEM Kennedy elegí la modalidad de Programación y Diseño Web porque me parece la combinación perfecta entre lógica y creatividad. En el día a día aprendo HTML, CSS, JavaScript y los fundamentos del diseño visual, pero lo que más disfruto es enfrentarme a una pantalla en blanco y construir desde cero algo que luego funciona en un navegador. Esa sensación de ver tu código cobrar vida es, para mí, completamente incomparable.</p>
+
+    <div class="pull-quote">
+        <p>"el que estudia es poque duda de sus conocimientos"</p>
+        <cite>— Pilarth, 2026</cite>
+    </div>
+
+    <p>Fuera del colegio, uno de mis hábitos favoritos es ir al gimnasio. Empecé en noviembre de 2024, justo cuando cumplí quince años, como un regalo que me hice a mí misma para comenzar una nueva etapa. Al principio era intimidante: las máquinas, los pesos libres, la gente que ya sabía exactamente lo que hacía. Pero con el tiempo descubrí que el gimnasio es muy parecido a programar: al principio el proceso parece difícil y sin resultados visibles, pero la constancia lo cambia todo. Hoy voy entre tres y cuatro veces por semana, combinando cardio con entrenamiento de fuerza funcional, y cada sesión me deja con más energía y determinación para enfrentar el resto del día.</p>
+
+    <p>Me apasiona la música, especialmente el hip-hop y el rap. Crecí escuchando a artistas latinoamericanos, pero fue gracias a una clase de inglés que descubrí a Eminem y su universo lírico. Sus letras, llenas de juegos de palabras y referencias culturales, me ayudaron a mejorar mi inglés de una manera mucho más entretenida que cualquier libro de texto. Hoy puedo decir con orgullo que soy fan desde hace varios años y que entiendo casi todas sus canciones sin necesitar subtítulos.</p>
+
+    <p>En mis tiempos libres también me dedico a aprender diseño gráfico por cuenta propia. YouTube, tutoriales de Figma, foros de Reddit sobre UI/UX... todo sirve. Tengo un cuaderno físico donde boceto interfaces antes de pasarlas a la computadora, una práctica que aprendí de un tutorial y que desde entonces no he abandonado. Mi sueño a mediano plazo es diseñar aplicaciones móviles que sean útiles para jóvenes de barrios populares como Kennedy, herramientas que conecten a las personas con oportunidades reales de estudio y trabajo.</p>
+
+    <p>Soy una persona tranquila pero muy apasionada. Me cuesta mucho dejar los proyectos a medias; cuando me meto de lleno en algo —ya sea una práctica del colegio, una nueva rutina en el gym o aprender una tecnología nueva— necesito ver el proceso hasta el final. Esa terquedad (que mi familia llama "carácter fuerte") es, creo yo, mi mayor fortaleza y el motor que me impulsa cada día.</p>
+
+    <p>Tengo dieciséis años, pero ya sé que quiero estudiar ingeniería de sistemas o diseño digital al terminar el bachillerato. Bogotá tiene universidades increíbles y el campo tecnológico en Colombia está creciendo a pasos agigantados. Quiero ser parte de esa generación que construye el país desde la pantalla, desde el código, desde la creatividad y la disciplina.</p>
+</section>
+
+<div class="sep"></div>
+
+<!-- ══ SECCIÓN: EMINEM ══ -->
+<section class="section" id="eminem">
+    <span class="section-label">Biografía</span>
+    <h2 class="section-title">Marshall Mathers III — Eminem</h2>
+
+    <!-- PÁRRAFO ORIGINAL -->
+    <p>Eminem, cuyo nombre real es Marshall Bruce Mathers III (nacido el 17 de octubre de 1972 en Misuri), es uno de los raperos, productores y actores más influyentes de la historia. Criado en la pobreza cerca de Detroit, superó una infancia difícil y el racismo en la industria para convertirse en una leyenda mundial del hip-hop</p>
+
+    <!-- GALERÍA -->
+    <div class="gallery">
+        <div class="gallery-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Eminem_-_Concert_for_Valor_in_Washington%2C_D.C._Nov._11%2C_2014_%281%29_%28Cropped%29.jpg/800px-Eminem_-_Concert_for_Valor_in_Washington%2C_D.C._Nov._11%2C_2014_%281%29_%28Cropped%29.jpg" alt="Eminem en concierto">
+            <span class="gallery-caption">En Concierto · 2014</span>
+        </div>
+        <div class="gallery-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Eminem_-_The_Slim_Shady_LP_cover.jpg/800px-Eminem_-_The_Slim_Shady_LP_cover.jpg" alt="The Slim Shady LP">
+            <span class="gallery-caption">The Slim Shady LP · 1999</span>
+        </div>
+        <div class="gallery-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Eminem_Recovery.jpg/800px-Eminem_Recovery.jpg" alt="Recovery">
+            <span class="gallery-caption">Recovery · 2010</span>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat"><span class="stat-number">220M+</span><span class="stat-label">Discos vendidos</span></div>
+        <div class="stat"><span class="stat-number">15</span><span class="stat-label">Grammys</span></div>
+        <div class="stat"><span class="stat-number">11</span><span class="stat-label">Álbumes de estudio</span></div>
+        <div class="stat"><span class="stat-number">1</span><span class="stat-label">Oscar · 8 Mile</span></div>
+    </div>
+
+    <p>Marshall Bruce Mathers III nació el 17 de octubre de 1972 en St. Joseph, Misuri, pero creció principalmente en los suburbios de Detroit, Míchigan, una ciudad marcada por la crisis industrial, la segregación racial y una vibrante escena musical underground. Su madre, Debbie Mathers, era una mujer joven con serios problemas de estabilidad emocional y económica, lo que significó que Marshall cambiara de casa y de escuela constantemente durante su infancia. Esta inestabilidad, lejos de hundirlo, forjó en él una capacidad extraordinaria para procesar el caos a través de las palabras.</p>
+
+    <p>Desde los catorce años, Marshall comenzó a frecuentar las batallas de rap del Club Estos de Detroit, un espacio donde los raperos demostraban su habilidad improvisando letras en competencias cara a cara. Como uno de los pocos artistas blancos en una escena dominada por artistas afroamericanos, tuvo que ganarse el respeto doble: con su talento y con su resiliencia ante las burlas y el desprecio inicial. Con el tiempo, la comunidad hip-hop de Detroit lo reconoció como uno de los mejores freestylers de la ciudad.</p>
+
+    <div class="pull-quote">
+        <p>"No me importa de dónde eres. Si tienes el don de las palabras y la valentía de usarlo, el mundo te escuchará."</p>
+        <cite>— Eminem</cite>
+    </div>
+
+    <p>En 1996 lanzó <em>Infinite</em>, su primer álbum de estudio independiente, que pasó casi desapercibido. Lejos de rendirse, redobló esfuerzos y creó al alter ego más transgresivo de la historia del rap: Slim Shady, un personaje nihilista, provocador y oscuramente cómico que le permitía explorar los rincones más extremos de la imaginación humana sin filtros. Fue ese personaje el que llamó la atención de Dr. Dre, quien quedó impresionado al escuchar el <em>Slim Shady EP</em> en 1997.</p>
+
+    <p>La alianza entre Eminem y Dr. Dre cambió la historia de la música popular. <em>The Slim Shady LP</em> (1999) fue un terremoto cultural: vendió más de un millón de copias en su primera semana, ganó dos Grammy y lanzó a Marshall al estrellato mundial de la noche a la mañana. Le siguieron <em>The Marshall Mathers LP</em> (2000), considerado por muchos críticos el mejor álbum de rap de todos los tiempos, y <em>The Eminem Show</em> (2002), que consolidó su dominio absoluto sobre la industria musical global.</p>
+</section>
+
+<div class="sep"></div>
+
+<!-- ══ SECCIÓN: DISCOGRAFÍA ══ -->
+<section class="section" id="discografia">
+    <span class="section-label">Cronología Musical</span>
+    <h2 class="section-title">Discografía Esencial</h2>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <p class="timeline-year">1996</p>
+            <p class="timeline-name">Infinite</p>
+            <p class="timeline-desc">Primer álbum independiente. Un arranque modesto que demostró el potencial lírico de un artista que aún buscaba su voz definitiva.</p>
+        </div>
+        <div class="timeline-item">
+            <p class="timeline-year">1999</p>
+            <p class="timeline-name">The Slim Shady LP</p>
+            <p class="timeline-desc">El debut mayor que sacudió al mundo entero. Ganador de dos Grammy. Slim Shady nació para quedarse en la historia.</p>
+        </div>
+        <div class="timeline-item">
+            <p class="timeline-year">2000</p>
+            <p class="timeline-name">The Marshall Mathers LP</p>
+            <p class="timeline-desc">Considerado por la crítica el álbum de rap más influyente de la historia. Vendió 1,76 millones de copias en su primera semana en EE. UU.</p>
+        </div>
+        <div class="timeline-item">
+            <p class="timeline-year">2002</p>
+            <p class="timeline-name">The Eminem Show</p>
+            <p class="timeline-desc">Más maduro y político. Canciones como "Without Me" y "Cleanin' Out My Closet" definieron toda una era cultural.</p>
+        </div>
+        <div class="timeline-item">
+            <p class="timeline-year">2004</p>
+            <p class="timeline-name">Encore</p>
+            <p class="timeline-desc">Un álbum errático pero lleno de momentos brillantes; señal de un artista al borde del agotamiento creativo y personal.</p>
+        </div>
+        <div class="timeline-item">
+            <p class="timeline-year">2009</p>
+            <p class="timeline-name">Relapse</p>
+            <p class="timeline-desc">El regreso tras años de adicción y recuperación. Crudo, oscuro y técnicamente impresionante.</p>
+        </div>
+        <div class="timeline-item">
+            <p class="timeline-year">2010</p>
+            <p class="timeline-name">Recovery</p>
+            <p class="timeline-desc">Un álbum de redención absoluta. "Not Afraid" y "Love the Way You Lie" dominaron las listas globales durante semanas.</p>
+        </div>
+        <div class="timeline-item">
+            <p class="timeline-year">2013 – 2024</p>
+            <p class="timeline-name">MMLP2 · Revival · Kamikaze · Music To Be Murdered By · The Death of Slim Shady</p>
+            <p class="timeline-desc">Una segunda vida artística que cerró círculos, rompió récords en streaming y confirmó que Eminem sigue siendo imbatible como escritor de rap.</p>
+        </div>
+    </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ══ SECCIÓN: LEGADO ══ -->
+<section class="section" id="legado">
+    <span class="section-label">Impacto Cultural</span>
+    <h2 class="section-title">El Legado de Slim Shady</h2>
+
+    <p>Pocos artistas en la historia de la música popular pueden reclamar el nivel de influencia que Eminem ha tenido sobre generaciones enteras de oyentes, escritores, músicos y productores. Su impacto trasciende el género: ha demostrado que el rap es una forma literaria legítima, capaz de explorar la psicología humana con una profundidad que rivaliza con la mejor narrativa en prosa.</p>
+
+    <p>Su habilidad técnica con las palabras es, sencillamente, sin precedentes en la música popular. Eminem es capaz de encadenar hasta diez sílabas por segundo manteniendo rima interna, rima doble, aliteración y coherencia narrativa al mismo tiempo. Lingüistas y académicos han analizado sus letras como textos literarios, encontrando estructuras retóricas que van desde el paralelismo y la anáfora hasta la ironía dramática y la alusión intertextual más sofisticada.</p>
+
+    <p>En términos de ventas, con más de 220 millones de discos vendidos en todo el mundo, Eminem es el artista de rap más vendido de la historia y uno de los artistas más vendidos de cualquier género en el planeta. Sus álbumes han debutado en el número uno en más de veinte países simultáneamente, una hazaña que muy pocos músicos de cualquier género han logrado jamás.</p>
+
+    <div class="pull-quote">
+        <p>"Él probó que el rap podía ser poesía, teatro y terapia al mismo tiempo. Nadie antes había llevado el género tan lejos."</p>
+        <cite>— Rolling Stone Magazine</cite>
+    </div>
+
+    <p>Su influencia sobre la cultura popular incluye también el cine: <em>8 Mile</em> (2002), la película semiautobiográfica en la que interpreta a un joven rapero blanco que lucha por abrirse camino en Detroit, ganó el Oscar a Mejor Canción Original con "Lose Yourself", convirtiéndose en el primer rapero en obtener ese galardón en la historia de la Academia.</p>
+
+    <p>Más allá de los premios y las cifras, el legado más profundo de Eminem es humano: millones de personas en todo el mundo han encontrado en su música un espejo de sus propias luchas con la pobreza, el abandono familiar, la adicción, la salud mental y el deseo de ser escuchados. En Colombia, en Kennedy, en los barrios populares de toda América Latina, sus canciones suenan en auriculares de jóvenes que tal vez no entienden cada palabra, pero sienten la intensidad de cada verso como propia.</p>
+
+    <p>En 2022 fue incluido en el <strong>Salón de la Fama del Rock and Roll</strong>, reconocimiento que pocos raperos han recibido y que confirmó lo que sus fans ya sabían desde hace décadas: Marshall Mathers es, simplemente, uno de los grandes artistas del siglo XX y XXI.</p>
+</section>
+
+<div class="sep"></div>
+
+<!-- ══ SECCIÓN: VIDEO (ORIGINAL) ══ -->
+<section class="section" id="video">
+    <span class="section-label">Contenido Multimedia</span>
+    <h2 class="section-title">Video Destacado</h2>
+    <p>A continuación, uno de los videoclip de mi carrera soñada.</p>
+    <div class="video-wrap">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/H5ZfKaNGTO4?si=0fFnkfV7vySANDWO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+</section>
+
+<footer>
+    <p>Pilarth &nbsp;·&nbsp; INEM Kennedy &nbsp;·&nbsp; Programación &amp; Diseño Web &nbsp;·&nbsp; 2026</p>
+</footer>
+
+<script>
+    const sections = document.querySelectorAll('.section');
+    const timelineItems = document.querySelectorAll('.timeline-item');
+
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+
+    const tlObs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+
+    sections.forEach(s => obs.observe(s));
+    timelineItems.forEach(t => tlObs.observe(t));
+
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        const hc = document.querySelector('.hero-content');
+        if(hc){
+            hc.style.transform = `translateY(${y * 0.28}px)`;
+            hc.style.opacity = Math.max(0, 1 - y / 550);
+        }
+    });
+</script>
+</body>
+</html>
